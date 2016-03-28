@@ -1,5 +1,13 @@
 # FHEM-SMAEM
 FHEM-Module for the SMA Energy Meter, a bidirectional counter used in photovoltaics
 
+# Installation & Dependencies
 
-Volker Kettenbach, volker@lettenbach-it.de
+# Setup
+
+# Usage
+
+# Support
+
+# Copyright
+Volker Kettenbach, volker@kettenbach-it.de
