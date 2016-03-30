@@ -39,7 +39,7 @@ Then you can define your SMA-EM like this:
 
 	define <name> SMAEM [<interval>];
 
-"[<interval>]" defines the update interval. If not set, it defaults to 60s. 
+"interval" defines the update interval. If not set, it defaults to 60s. 
 Since the SMAEM sends updates once a second (firmware 1.02.04.R, March 2016), 
 you can update the readings once a second by lowering the interval to 1, which 
 is not recommended, since it puts FHEM under heavy load. 
