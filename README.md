@@ -63,6 +63,17 @@ so you can distinguish between different SMA-EM inside FHEM.
 
 ## Support
 
+### Forum
+A forum for users of this module can be found at:
+https://forum.fhem.de/index.php/topic,51569.0.html
+
+### Issues
+Please submit issues to github:
+https://github.com/kettenbach-it/FHEM-SMAEM/issues
+
+### Patches
+In case you fix something, please submit a patch to
+https://github.com/kettenbach-it/FHEM-SMAEM/issues
 
 ## Copyright
 Volker Kettenbach, volker (at) kettenbach (minus) it (dot) de
