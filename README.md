@@ -7,7 +7,7 @@ used in photovoltaics.
 This module requires:
 - Perl Module: IO::Socket::Multicast
 On a Debian (based) system, these requirements can be fullfilled by:
-- apt-get install install libio-socket-multicast-perl
+- apt-get install libio-socket-multicast-perl
 
 Before you start using 77_SMAEM.pm, you should try the test
 programm smaem_test.pl. It will read data sent by the SMA-EM
