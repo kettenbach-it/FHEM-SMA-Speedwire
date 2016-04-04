@@ -198,8 +198,8 @@ sub SMAEM_Read($)
     my $l2_bezug_wirk_count=hex(substr($hex,624,16))/3600000;
     my $l2_einspeisung_wirk=hex(substr($hex,648,8))/10;
     my $l2_einspeisung_wirk_count=hex(substr($hex,664,16))/3600000;
-    readingsBulkUpdate($hash, "SMAEM".$smaserial."_L2_Saldo_Wirkleistung", sprintf("%.1f",$l2_einspeisung_wirk-$l1_bezug_wirk));
-    readingsBulkUpdate($hash, "SMAEM".$smaserial."_L2_Saldo_Wirkleistung_Zaehler", sprintf("%.1f",$l2_einspeisung_wirk_count-$l1_bezug_wirk_count));
+    readingsBulkUpdate($hash, "SMAEM".$smaserial."_L2_Saldo_Wirkleistung", sprintf("%.1f",$l2_einspeisung_wirk-$l2_bezug_wirk));
+    readingsBulkUpdate($hash, "SMAEM".$smaserial."_L2_Saldo_Wirkleistung_Zaehler", sprintf("%.1f",$l2_einspeisung_wirk_count-$l2_bezug_wirk_count));
     readingsBulkUpdate($hash, "SMAEM".$smaserial."_L2_Bezug_Wirkleistung", sprintf("%.1f",$l2_bezug_wirk));
     readingsBulkUpdate($hash, "SMAEM".$smaserial."_L2_Bezug_Wirkleistung_Zaehler", sprintf("%.1f",$l2_bezug_wirk_count));
     readingsBulkUpdate($hash, "SMAEM".$smaserial."_L2_Einspeisung_Wirkleistung", sprintf("%.1f",$l2_einspeisung_wirk));
@@ -235,8 +235,8 @@ sub SMAEM_Read($)
     my $l3_bezug_wirk_count=hex(substr($hex,912,16))/3600000;
     my $l3_einspeisung_wirk=hex(substr($hex,936,8))/10;
     my $l3_einspeisung_wirk_count=hex(substr($hex,952,16))/3600000;
-    readingsBulkUpdate($hash, "SMAEM".$smaserial."_L3_Saldo_Wirkleistung", sprintf("%.1f",$l3_einspeisung_wirk-$l1_bezug_wirk));
-    readingsBulkUpdate($hash, "SMAEM".$smaserial."_L3_Saldo_Wirkleistung_Zaehler", sprintf("%.1f",$l3_einspeisung_wirk_count-$l1_bezug_wirk_count));
+    readingsBulkUpdate($hash, "SMAEM".$smaserial."_L3_Saldo_Wirkleistung", sprintf("%.1f",$l3_einspeisung_wirk-$l3_bezug_wirk));
+    readingsBulkUpdate($hash, "SMAEM".$smaserial."_L3_Saldo_Wirkleistung_Zaehler", sprintf("%.1f",$l3_einspeisung_wirk_count-$l3_bezug_wirk_count));
     readingsBulkUpdate($hash, "SMAEM".$smaserial."_L3_Bezug_Wirkleistung", sprintf("%.1f",$l3_bezug_wirk));
     readingsBulkUpdate($hash, "SMAEM".$smaserial."_L3_Bezug_Wirkleistung_Zaehler", sprintf("%.1f",$l3_bezug_wirk_count));
     readingsBulkUpdate($hash, "SMAEM".$smaserial."_L3_Einspeisung_Wirkleistung", sprintf("%.1f",$l3_einspeisung_wirk));
