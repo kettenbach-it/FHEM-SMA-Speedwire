@@ -101,7 +101,7 @@ sub SMAEM_Read($)
   return unless $socket->recv($data, 600); # Each SMAEM packet is 600 bytes of packed payload
   Log3 $hash, 5, "$name: Received " . length($data) . " bytes.";
 
-  if ($hash->{LASTUPDATE}==0 | time() >= $hash->{LASTUPDATE}+$hash->{INTERVAL}){
+  if ($hash->{LASTUPDATE}==0 || time() >= $hash->{LASTUPDATE}+$hash->{INTERVAL}){
     readingsBeginUpdate($hash);
     # Format of the udp packets of the SMAEM:
     # http://www.sma.de/fileadmin/content/global/Partner/Documents/SMA_Labs/EMETER-Protokoll-TI-de-10.pdf
