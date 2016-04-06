@@ -20,7 +20,7 @@
 ##  This module requires:
 ##  - Perl Module: IO::Socket::Multicast
 ##  On a Debian (based) system, these requirements can be fullfilled by:
-##  - apt-get install install libio-socket-multicast-perl
+##  - apt-get install libio-socket-multicast-perl
 ##
 ##  Origin:
 ##  https://github.com/kettenbach-it/FHEM-SMAEM
