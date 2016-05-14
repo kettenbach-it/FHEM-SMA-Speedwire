@@ -1,5 +1,5 @@
 # FHEM-SMA-Speedwire
-Repository for FHEM-support of devices that talk "SMA Speedwire" protocol.
+Repository for FHEM-support of devices that use the "SMA Speedwire" protocol.
 
 * 77_SMAEM.pm: Support for SMA Energymeter, a bidirectional energy meter/counter
 * 77_SMASTP.pm: Planned: support for SMA Sunnty Tripower Inverter
