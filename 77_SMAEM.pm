@@ -8,7 +8,7 @@
 #
 #  Credits: 
 #  - DS_Starter (Heiko) for persistent readings
-#    and various improvments
+#    and various improvements
 #
 #  Description:
 #  This is an FHEM-Module for the SMA Energy Meter, 
@@ -21,7 +21,7 @@
 #  - apt-get install install libio-socket-multicast-perl
 #
 #  Origin:
-#  https://github.com/kettenbach-it/FHEM-SMAEM
+#  https://github.com/kettenbach-it/FHEM-SMA-Speedwire
 #
 ################################################################
 
