@@ -1,9 +1,14 @@
 ################################################################
+# $Id$
 #
 #  Copyright notice
 #
 #  (c) 2016 Copyright: Volker Kettenbach
 #  e-mail: volker at kettenbach minus it dot de
+#
+#  Credits: 
+#  - DS_Starter (Heiko) for persistent readings
+#    and various improvments
 #
 #  Description:
 #  This is an FHEM-Module for the SMA Energy Meter, 
@@ -34,15 +39,19 @@ SMAEM_Initialize($)
 {
   my ($hash) = @_;
   
-  $hash->{ReadFn}  = "SMAEM_Read";
-  $hash->{DefFn}   = "SMAEM_Define";
-  $hash->{UndefFn} = "SMAEM_Undef";
+  $hash->{ReadFn}     = "SMAEM_Read";
+  $hash->{DefFn}      = "SMAEM_Define";
+  $hash->{UndefFn}    = "SMAEM_Undef";
+  $hash->{DeleteFn}   = "SMAEM_Delete";
   #$hash->{WriteFn} = "SMAEM_Write";
   #$hash->{ReadyFn} = "SMAEM_Ready";
   #$hash->{GetFn}   = "SMAEM_Get";
   #$hash->{SetFn}   = "SMAEM_Set";
-  #$hash->{AttrFn}  = "SMAEM_Attr";
-  $hash->{AttrList}= "$readingFnAttributes";
+  $hash->{AttrFn}     = "SMAEM_Attr";
+  $hash->{AttrList}   = "interval ".
+			"feedinPrice ".
+			"powerCost ".	
+                      "$readingFnAttributes";
 }
 
 #####################################
@@ -51,17 +60,19 @@ SMAEM_Define($$)
 {
   my ($hash, $def) = @_;
   my $name= $hash->{NAME};
+  my ($success, $gridin_sum, $gridout_sum);
   
-  my @a = split(/\s+/, $def);
-  my $interval = 60;
-  $interval = $a[2] if($a[2]);
-  $hash->{INTERVAL}=$interval;
+  $hash->{INTERVAL} = 60 ;
+                
   $hash->{LASTUPDATE}=0;
-
-  Log3 $hash, 3, "$name: Opening multicast socket...";
+  $hash->{HELPER}{LASTUPDATE} = 0;
+    
+  Log3 $hash, 3, "$name - Opening multicast socket...";
   my $socket = IO::Socket::Multicast->new(
-    Proto     => 'udp',
-    LocalPort => '9522',
+           Proto     => 'udp',
+           LocalPort => '9522',
+           ReuseAddr => '1',
+           ReusePort => defined(&ReusePort) ? 1 : 0,
   ) or return "Can't bind : $@";
   
   $socket->mcast_add('239.12.255.254');
@@ -70,23 +81,64 @@ SMAEM_Define($$)
   $hash->{FD} = $socket->fileno();
   delete($readyfnlist{"$name"});
   $selectlist{"$name"} = $hash;
-
-  return undef;
+  
+  # gespeicherte Energiezählerwerte von File einlesen
+  ($success, $gridin_sum, $gridout_sum) = getsum($hash);
+  if ($success) {
+      $hash->{GRIDIN_SUM} = $gridin_sum;
+      $hash->{GRIDOUT_SUM} = $gridout_sum;
+      Log3 $name, 3, "$name - read saved energy values from file - GRIDIN_SUM: $gridin_sum, GRIDOUT_SUM: $gridout_sum";
+  }
+  
+return undef;
 }
 
-
-#####################################
 sub
 SMAEM_Undef($$)
 {
   my ($hash, $arg) = @_;
   my $name= $hash->{NAME};
   my $socket= $hash->{TCPDev};
+  
   Log3 $hash, 3, "$name: Closing multicast socket...";
   $socket->mcast_drop('239.12.255.254');
-  $socket->close;
+  # $socket->close;
+  
+  my $ret = close($hash->{TCPDev});
+  Log3 $hash, 4, "$name: Close-ret: $ret";
+  delete($hash->{TCPDev});
+  delete($selectlist{"$name"});
+  delete($hash->{FD});
 
-  return undef;
+  return;
+}
+
+sub SMAEM_Delete {
+    my ($hash, $arg) = @_;
+    my $index = $hash->{TYPE}."_".$hash->{NAME}."_energysum";
+    
+    # gespeicherte Energiezählerwerte löschen
+    setKeyValue($index, undef);
+    
+return undef;
+}
+
+sub SMAEM_Attr {
+  my ($cmd,$name,$aName,$aVal) = @_;
+  my $hash = $defs{$name};
+  
+  # $cmd can be "del" or "set"
+  # $name is device name
+  # aName and aVal are Attribute name and value
+  
+  if ($aName eq "interval") {
+      if($cmd eq "set") {
+          $hash->{INTERVAL} = $aVal;
+      } else {
+          $hash->{INTERVAL} = "60";
+      }
+  }
+return undef;
 }
 
 #####################################
@@ -101,7 +153,7 @@ sub SMAEM_Read($)
   return unless $socket->recv($data, 600); # Each SMAEM packet is 600 bytes of packed payload
   Log3 $hash, 5, "$name: Received " . length($data) . " bytes.";
 
-  if ($hash->{LASTUPDATE}==0 || time() >= $hash->{LASTUPDATE}+$hash->{INTERVAL}){
+  if ($hash->{HELPER}{LASTUPDATE} == 0 || time() >= $hash->{HELPER}{LASTUPDATE}+$hash->{INTERVAL}) {
     readingsBeginUpdate($hash);
     # Format of the udp packets of the SMAEM:
     # http://www.sma.de/fileadmin/content/global/Partner/Documents/SMA_Labs/EMETER-Protokoll-TI-de-10.pdf
@@ -119,6 +171,8 @@ sub SMAEM_Read($)
     my $susyid=hex(substr($hex,36,4));
     my $smaserial=hex(substr($hex,40,8));
     my $milliseconds=hex(substr($hex,48,8));
+    #readingsBulkUpdate($hash, "SUSy-ID", $susyid);
+    #readingsBulkUpdate($hash, "Seriennummer", $smaserial);
 
     # Counter Divisor: [Hex-Value]=Ws => Ws/1000*3600=kWh => divide by 3600000
     # Sum L1-3
@@ -133,6 +187,33 @@ sub SMAEM_Read($)
     readingsBulkUpdate($hash, "SMAEM".$smaserial."_Bezug_Wirkleistung_Zaehler", sprintf("%.1f",$bezug_wirk_count));
     readingsBulkUpdate($hash, "SMAEM".$smaserial."_Einspeisung_Wirkleistung", sprintf("%.1f",$einspeisung_wirk));
     readingsBulkUpdate($hash, "SMAEM".$smaserial."_Einspeisung_Wirkleistung_Zaehler", sprintf("%.1f",$einspeisung_wirk_count));
+    
+    if(!$hash->{GRIDOUT_SUM} || ReadingsVal($name,"SMAEM".$smaserial."_Bezug_Wirkleistung_Zaehler","") < $hash->{GRIDOUT_SUM}) {
+        $hash->{GRIDOUT_SUM} = sprintf("%.4f",$bezug_wirk_count);
+    } else {
+        if (ReadingsVal($name,"SMAEM".$smaserial."_Bezug_Wirkleistung_Zaehler","") >= $hash->{GRIDOUT_SUM}) {     
+            my $diffb = $bezug_wirk_count - $hash->{GRIDOUT_SUM};     
+            $hash->{GRIDOUT_SUM} = sprintf("%.4f",$bezug_wirk_count);
+            readingsBulkUpdate($hash, "SMAEM".$smaserial."_Bezug_WirkP_Zaehler_Diff", $diffb);
+	    readingsBulkUpdate($hash, "SMAEM".$smaserial."_Bezug_WirkP_Kosten_Diff", sprintf("%.4f", $diffb*AttrVal($hash->{NAME}, "powerCost", 0)));
+        }
+    }
+
+    if(!$hash->{GRIDIN_SUM} || ReadingsVal($name,"SMAEM".$smaserial."_Einspeisung_Wirkleistung_Zaehler","") < $hash->{GRIDIN_SUM}) {
+        $hash->{GRIDIN_SUM} = sprintf("%.4f",$einspeisung_wirk_count);
+    } else {
+        if (ReadingsVal($name,"SMAEM".$smaserial."_Einspeisung_Wirkleistung_Zaehler","") >= $hash->{GRIDIN_SUM}) {
+            my $diffe = $einspeisung_wirk_count - $hash->{GRIDIN_SUM};
+            $hash->{GRIDIN_SUM} = sprintf("%.4f",$einspeisung_wirk_count);
+            readingsBulkUpdate($hash, "SMAEM".$smaserial."_Einspeisung_WirkP_Zaehler_Diff", $diffe);
+	    readingsBulkUpdate($hash, "SMAEM".$smaserial."_Einspeisung_WirkP_Verguet_Diff", sprintf("%.4f", $diffe*AttrVal($hash->{NAME}, "feedinPrice", 0)));
+        }
+    }
+    
+    # GRIDIN_SUM und GRIDOUT_SUM in File schreiben
+    my $success = setsum($hash, $hash->{GRIDIN_SUM}, $hash->{GRIDOUT_SUM});
+    
+    
   
     my $bezug_blind=hex(substr($hex,144,8))/10;
     my $bezug_blind_count=hex(substr($hex,160,16))/3600000;
@@ -268,14 +349,77 @@ sub SMAEM_Read($)
     readingsBulkUpdate($hash, "SMAEM".$smaserial."_L3_CosPhi", sprintf("%.3f",$l3_cosphi));
 
     readingsEndUpdate($hash, 1);
-    $hash->{LASTUPDATE}=time();
+
+    $hash->{HELPER}{LASTUPDATE}=time();
+    
+   # $update time
+   my ($sec,$min,$hour,$mday,$mon,$year,undef,undef,undef) = localtime;
+   $hash->{LASTUPDATE} = sprintf "%02d.%02d.%04d / %02d:%02d:%02d" , $mday , $mon+=1 ,$year+=1900 , $hour , $min , $sec ;
   }
 }
 
+######################################################################################
+###  Summenwerte für GridIn, GridOut speichern
 
-#############################
+sub setsum ($$$) {
+    my ($hash, $gridin_sum, $gridout_sum) = @_;
+    my $name     = $hash->{NAME};
+    my $success;
+    my $index;
+    my $retcode;
+    my $sumstr;
+    
+    $sumstr = $gridin_sum."_".$gridout_sum;
+    
+    $index = $hash->{TYPE}."_".$hash->{NAME}."_energysum";
+    $retcode = setKeyValue($index, $sumstr);
+    
+    if ($retcode) { 
+        Log3($name, 1, "$name - Error while saving summary of energy values - $retcode");
+        $success = 0;
+        }
+        else
+        {
+        Log3($name, 4, "$name - summary of energy values saved - GRIDIN_SUM: $gridin_sum, GRIDOUT_SUM: $gridout_sum"); 
+        $success = 1;
+        }
+
+return ($success);
+}
+
+######################################################################################
+###  Summenwerte für GridIn, GridOut abtufen
+
+sub getsum ($) {
+    my ($hash) = @_;
+    my $name     = $hash->{NAME};
+    my $success;
+    my $index;
+    my $retcode;
+    my $sumstr;
+    my ($gridin_sum, $gridout_sum);
+    
+    $index = $hash->{TYPE}."_".$hash->{NAME}."_energysum";
+    ($retcode, $sumstr) = getKeyValue($index);
+    
+    if ($retcode) {
+        Log3($name, 1, "$name - ERROR -unable to read summary of energy values from file - $retcode");
+        $success = 0;
+    }  
+
+    if ($sumstr) {
+        ($gridin_sum, $gridout_sum) = split(/_/, $sumstr);
+        Log3($name, 4, "$name - summary of energy values was read from file - GRIDIN_SUM: $gridin_sum, GRIDOUT_SUM: $gridout_sum"); 
+        $success = 1;
+    }
+    
+return ($success, $gridin_sum, $gridout_sum);        
+}
+
+######################################################################################
+
 1;
-#############################
+
 
 
 =pod
@@ -289,14 +433,14 @@ sub SMAEM_Read($)
   <a name="SMAEM"></a>
   <b>Define</b>
   <ul>
-    <code>define &lt;name&gt; SMAEM [&lt;interval&gt];</code><br>
+    <code>define &lt;name&gt; SMAEM </code><br>
     <br>
     Defines a SMA Energy Meter (SMAEM), a bidirectional energy meter/counter used in photovoltaics. 
     <br><br>
     You need at least one SMAEM on your local subnet or behind a multicast enabled network of routers to receive multicast messages from the SMAEM over the
     multicast group 239.12.255.254 on udp/9522. Multicast messages are sent by SMAEM once a second (firmware 1.02.04.R, March 2016).
     <br><br>
-    [&lt;interval&gt] defines the update interval. If not set, it defaults to 60s. Since the SMAEM sends updates once a second, you can
+    The update interval will be set by attribute "interval". If not set, it defaults to 60s. Since the SMAEM sends updates once a second, you can
     update the readings once a second by lowering the interval to 1 (Not recommended, since it puts FHEM under heavy load).
     <br><br>
     You need the perl module IO::Socket::Multicast. Under Debian (based) systems it can be installed with <code>apt-get install libio-socket-multicast-perl</code>.
@@ -304,5 +448,35 @@ sub SMAEM_Read($)
 
 </ul>
 
-
 =end html
+
+=begin html_DE
+
+<a name="SMAEM"></a>
+<h3>SMAEM</h3>
+<ul>
+  <br>
+
+  <a name="SMAEM"></a>
+  <b>Define</b>
+  <ul>
+    <code>define &lt;name&gt; SMAEM </code><br>
+    <br>
+    Definiert ein SMA Energy Meter (SMAEM), einen bidirektionalen Stromzähler, der häufig in Photovolatikanlagen der Firma SMA zum Einsatz kommt. 
+    <br><br>
+    Sie brauchen mindest ein SMAEM in Ihrem lokalen Netzwerk oder hinter einemmulticast fähigen Netz von Routern, um die Daten des SMAEM über die
+    Multicastgruppe 239.12.255.254 auf udp/9522 zu empfangen. Die Multicastpakete werden vom SMAEM einmal pro Sekunde ausgesendet (firmware 1.02.04.R, März 2016).
+    <br><br>
+    Das update interval kann über das Attribut "interval" gesetzt werden. Wenn es nicht gesetzt wird, werden updates per default alle 60 Sekunden durchgeführt.
+    Das das SMAEM seine Daten sekündlich aktualisiert, kann das update interval auf bis zu eine Sekunden reduziert werden. Das wird nicht empfohlen, da FHEM
+    sonst unter große Last gesetzt wird.
+    <br><br>
+    Sie benötigen das Perl-Module IO::Socket::Multicast für dieses FHEM Modul. Unter Debian (basierten) System, kann dies mittels <code>apt-get install libio-socket-multicast-perl</code> installiert werden. 
+  </ul>  
+
+</ul>
+
+
+
+=end html_DE
+

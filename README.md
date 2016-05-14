@@ -1,8 +1,15 @@
-# FHEM-SMAEM
+# FHEM-SMA-Speedwire
+Repository for FHEM-support of devices that talk "SMA Speedwire" protocol.
+
+* 77_SMAEM.pm: Support for SMA Energymeter, a bidirectional energy meter/counter
+* 77_SMASTP.pm: Planned: support for SMA Sunnty Tripower Inverter
+
+
+## FHEM-SMAEM
 FHEM-Module for the SMA Energy Meter, a bidirectional energy meter/counter 
 used in photovoltaics.
 
-## Installation & Dependencies
+### Installation & Dependencies
 
 This module requires:
 - Perl Module: IO::Socket::Multicast
@@ -27,53 +34,61 @@ which doesn't understand multicast and will just treat it as broadcast.
 Once you get proper readings with smaem_test.pl, you can install 77_SMAEM.pm
 just by copying it to your FHEM-installation.
 
-## Setup
+### Setup
 
 Once copied to four FHEM-installation folder ("/FHEM"), load the module with
 
 	reload 77_SMAEM
 
-## Usage
+### Usage
 
 Then you can define your SMA-EM like this: 
 
-	define <name> SMAEM [<interval>];
+	define <name> SMAEM;
 
-"interval" defines the update interval. If not set, it defaults to 60s. 
+"The attibut interval" defines the update interval. If not set, it defaults to 60s. 
 Since the SMAEM sends updates once a second (firmware 1.02.04.R, March 2016), 
 you can update the readings once a second by lowering the interval to 1, which 
 is not recommended, since it puts FHEM under heavy load. 
 
 Example:
 
-	define DP11_SMAEM SMAEM 60
+	define DP11_SMAEM SMAEM
 	attr DP11_SMAEM alias SMA Energy Meter
 	attr DP11_SMAEM group Photovoltaik Anlage
 	attr DP11_SMAEM room Zähler
+	attr DP11_SMAEM interval 120
+	attr DP11_SMAEM powerCost 0.28
+	attr DP11_SMAEM feedinPrice 0.124
+	attr DP11_SMAEM icon measure_power
 	attr DP11_SMAEM stateFormat {sprintf("%.1f",ReadingsVal($name,"state",0))." W"}
 
 	define DP11_SMAEM_LOG FileLog ./log/DP11_SMAEM_LOG-%Y.log DP11_SMAEM|DP11_SMAEM:.*
 
 
-## Limitations
+### Limitations
 77_SMAEM.pm is in principle capable of supporting several SMA-EMs but it has not been tested.
 In case you have more than one SMA-EM, please contact me.
 Each reading of each SMA-EM will be uniquely named containg the serial of the SMA-EM it came from,
 so you can distinguish between different SMA-EM inside FHEM.
 
-## Support
+### Support
 
-### Forum
+#### Forum
 A forum for users of this module can be found at:
 https://forum.fhem.de/index.php/topic,51569.0.html
 
-### Issues
+#### Issues
 Please submit issues to github:
 https://github.com/kettenbach-it/FHEM-SMAEM/issues
 
-### Patches
+#### Patches
 In case you fix something, please submit a patch to
 https://github.com/kettenbach-it/FHEM-SMAEM/issues
 
-## Copyright
+### Copyright
 Volker Kettenbach, volker (at) kettenbach (minus) it (dot) de
+
+
+## FHEM-SMASTP
+.. planned...
