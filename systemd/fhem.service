@@ -1,0 +1,13 @@
+[Unit]
+Description=FHEM Perl Server
+After=syslog.target network.target knxd.service 
+
+[Service]
+Type=forking
+User=root
+WorkingDirectory=/opt/fhem
+ExecStart=/usr/bin/perl /opt/fhem/fhem.pl /opt/fhem/fhem.cfg
+Restart=on-success
+
+[Install]
+WantedBy=multi-user.target
