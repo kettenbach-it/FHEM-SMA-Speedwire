@@ -28,8 +28,8 @@ that those routers have multicast forwarding enabled and configured.
 
 Beware: some cheap soho-switches in the 50 euro class pretend to work with 
 multicast but inexplicably block random multicast groups. 
-You either have to switch to a better switch or use a supe simpe one (10 Euro),
-which doesn't understand multicast and will just treat it as broadcast.
+You either have to switch to a better switch or use a super simple one (10 Euro),
+which doesn't understand multicast at all and will just treat it as broadcast.
 
 Once you get proper readings with smaem_test.pl, you can install 77_SMAEM.pm
 just by copying it to your FHEM-installation.
