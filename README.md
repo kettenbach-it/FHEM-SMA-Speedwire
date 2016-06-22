@@ -2,7 +2,7 @@
 Repository for FHEM-support of devices that use the "SMA Speedwire" protocol.
 
 * 77_SMAEM.pm: Support for SMA Energymeter, a bidirectional energy meter/counter
-* 77_SMASTP.pm: Planned: support for SMA Sunnty Tripower Inverter
+* 77_SMASTP.pm: Support for SMA Sunnty Tripower Inverter
 
 
 ## FHEM-SMAEM
@@ -72,23 +72,31 @@ In case you have more than one SMA-EM, please contact me.
 Each reading of each SMA-EM will be uniquely named containg the serial of the SMA-EM it came from,
 so you can distinguish between different SMA-EM inside FHEM.
 
-### Support
-
-#### Forum
-A forum for users of this module can be found at:
-https://forum.fhem.de/index.php/topic,51569.0.html
-
-#### Issues
-Please submit issues to github:
-https://github.com/kettenbach-it/FHEM-SMAEM/issues
-
-#### Patches
-In case you fix something, please submit a patch to
-https://github.com/kettenbach-it/FHEM-SMAEM/issues
-
-### Copyright
-Volker Kettenbach, volker (at) kettenbach (minus) it (dot) de
-
 
 ## FHEM-SMASTP
-.. planned...
+Ducomentation t.b.d.
+
+
+
+## Support
+
+### Forum
+#### SMA-EM
+A forum for users of the SMA-EM module can be found at:
+https://forum.fhem.de/index.php/topic,51569.0.html
+
+#### SMA-STP
+A forum for users of the SMA-STP module can be found at:
+https://forum.fhem.de/index.php/topic,42688.0.html
+
+### Issues
+Please submit issues to github:
+https://github.com/kettenbach-it/FHEM-SMA-Speedwire/issues
+
+### Patches
+In case you fix something, please submit a patch to
+https://github.com/kettenbach-it/FHEM-SMA-Speedwire/issues
+
+## Copyright
+Volker Kettenbach, volker (at) kettenbach (minus) it (dot) de
+
