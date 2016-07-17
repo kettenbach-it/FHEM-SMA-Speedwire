@@ -116,6 +116,18 @@ Example:
 	define DP11_SMASTP_LOG FileLog ./log/DP11_SMASTP_LOG-%Y-%m.log  DP11_SMASTP
 	attr DP11_SMASTP_LOG room Logs
 
+Readings:
+
+        SpotP: spotpower - Current power in watt delivered by the inverter
+        AvP01: average power 1 minute: average power in watt of the last minute
+        AvP05: average power 5 minutes: average power in watt of the five minutes
+        AvP15: average power 15 minutes: average power in watt of the fifteen minutes
+        SpotPDC1: current d.c. voltage delivered by string 1
+        SpotPDC2: current d.c. voltage delivered by string 2
+        TotalTodayP: generated power in Wh of the current day
+        AlltimeTotalP: all time generated power in Wh
+        Alarm1..3: alrm trigger 1..3. Set by parameter alarmN-value
+
 
 ## Support
 
