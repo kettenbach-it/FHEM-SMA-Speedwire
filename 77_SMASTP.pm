@@ -421,6 +421,12 @@ sub SMASTP_GetStatus($)
 			{
 				my $received = unpack("H*", $data);
 				Log3 $name, 5, "$name: Received: ($received)";
+			} else {
+				if($size > 0)
+				{
+					my $received = unpack("H*", $data);
+					Log3 $name, 5, "$name: Received Garbage: ($received)";
+				}
 			}
 			
 			alarm 0;
