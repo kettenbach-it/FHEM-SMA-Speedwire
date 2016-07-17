@@ -2,7 +2,7 @@
 Repository for FHEM-support of devices that use the "SMA Speedwire" protocol.
 
 * 77_SMAEM.pm: Support for SMA Energymeter, a bidirectional energy meter/counter
-* 77_SMASTP.pm: Support for SMA Sunnty Tripower Inverter
+* 77_SMASTP.pm: Support for SMA Sunny Tripower Inverter
 
 
 ## FHEM-SMAEM
@@ -74,8 +74,47 @@ so you can distinguish between different SMA-EM inside FHEM.
 
 
 ## FHEM-SMASTP
-Ducomentation t.b.d.
 
+### Installation & Dependencies
+
+This module requires:
+- Perl Module: IO::Socket::INET
+- Perl Module: Datime
+
+Before you start using 77_SMASTP.pm, you should try the test
+programm smaestp_test.pl. It will connect to the SMA STP, read some data
+and will print it to the terminal.
+
+If you get proper readings with smastp_test.pl, you can install 77_SMASTP.pm
+just by copying it to your FHEM-installation.
+
+### Setup
+
+Once copied to four FHEM-installation folder ("/FHEM"), load the module with
+
+	reload 77_SMASTP
+
+### Usage
+
+Then you can define your SMA-EM like this: 
+
+	define <name> SMASTP <pin> <hostname/ip> [port]
+
+* pin: User-Password of the SMA STP Inverter. Default is 0000. Can be changed by "Sunny Explorer" Windows Software
+* hostname/ip: Hostname or IP-Adress of the inverter (or it's speedwire piggyback module)
+* port: Port of the inverter. 9522 by default.
+
+Example:
+
+	define DP11_SMASTP SMASTP 0000 mysmastp.mydomain.com
+	attr DP11_SMASTP alias DP11 SMA Wechselrichter STP 10000-TL20
+	attr DP11_SMASTP group Photovoltaik Anlage
+	attr DP11_SMASTP icon measure_power
+	attr DP11_SMASTP interval 120
+	attr DP11_SMASTP room Zähler
+
+	define DP11_SMASTP_LOG FileLog ./log/DP11_SMASTP_LOG-%Y-%m.log  DP11_SMASTP
+	attr DP11_SMASTP_LOG room Logs
 
 
 ## Support
