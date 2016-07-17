@@ -105,6 +105,12 @@ Then you can define your SMA-EM like this:
 * hostname/ip: Hostname or IP-Adress of the inverter (or it's speedwire piggyback module)
 * port: Port of the inverter. 9522 by default.
 
+The module automatically detects the inactvity of the inverter due to a lack of light (night). 
+This inactivity is therefore called "nightmode". During nightmode, the inverter is not queried over the nwtwork.
+By default nightmode is between 9pm and 5am. This can be changed by "starttime" (start of inverter 
+operation, ende of nightmode) and "endtime" (end of inverter operation, start of nightmode).
+Further there is the inactivitymode: in inactivitymode, the inverter is queried but readings are not updated.
+
 Example:
 
 	define DP11_SMASTP SMASTP 0000 mysmastp.mydomain.com
