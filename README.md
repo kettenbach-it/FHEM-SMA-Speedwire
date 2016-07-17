@@ -111,6 +111,18 @@ By default nightmode is between 9pm and 5am. This can be changed by "starttime" 
 operation, ende of nightmode) and "endtime" (end of inverter operation, start of nightmode).
 Further there is the inactivitymode: in inactivitymode, the inverter is queried but readings are not updated.
 
+Parameter:
+
+* interval: Queryintreval in seconds
+* suppress-night-mode: The nightmode is deactivated
+* suppress-inactivity-mode: The inactivitymode is deactivated
+* starttime: Starttime of inverter operation (default 5am)
+* endtime: Endtime of inverter operation (default 9pm)
+* force-sleepmode: The nightmode is activated on inactivity, even the endtime is not reached
+* enable-modulstate: Turns the reading "modulstate" (normal / inactive / sleeping) on
+* alarm1-value, alarm2-value, alarm3-value: Set an alarm on the reading SpotP in watt.<br>
+The readings Alarm1..Alarm3 are set accordingly: -1 for SpotP < alarmX-value and 1 for SpotP >= alarmX-value
+
 Example:
 
 	define DP11_SMASTP SMASTP 0000 mysmastp.mydomain.com
