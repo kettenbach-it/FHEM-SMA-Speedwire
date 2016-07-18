@@ -591,9 +591,9 @@ Tested on Sunny Tripower 6000TL-20, 10000-TL20 and 10000TL-10 with Speedwire/Web
 <ul>
 <code>define &lt;name&gt; SMASTP &lt;pin&gt; &lt;hostname/ip&gt; [port]</code><br>
 <br>
-<li>pin: User-Password of the SMA STP Inverter. Default is 0000. Can be changed by "Sunny Explorer" Windows Software
-<li>hostname/ip: Hostname or IP-Adress of the inverter (or it's speedwire piggyback module)
-<li>port: Port of the inverter. 9522 by default.
+<li>pin: User-Password of the SMA STP Inverter. Default is 0000. Can be changed by "Sunny Explorer" Windows Software</li>
+<li>hostname/ip: Hostname or IP-Adress of the inverter (or it's speedwire piggyback module).</li>
+<li>port: Port of the inverter. 9522 by default.</li>
 </ul>
 
 <p>
@@ -602,35 +602,35 @@ Tested on Sunny Tripower 6000TL-20, 10000-TL20 and 10000TL-10 with Speedwire/Web
 <ul>
 The module automatically detects the inactvity of the inverter due to a lack of light (night). <br>
 This inactivity is therefore called "nightmode". During nightmode, the inverter is not queried over the nwtwork.<br>
-By default nightmode is between 9pm and 5am. This can be changed by "starttime" (start of inverter <b>
+By default nightmode is between 9pm and 5am. This can be changed by "starttime" (start of inverter <br>
 operation, ende of nightmode) and "endtime" (end of inverter operation, start of nightmode).<br>
 Further there is the inactivitymode: in inactivitymode, the inverter is queried but readings are not updated.
 </ul>
 
 <b>Parameter</b>
 <ul>
-	<li>interval: Queryintreval in seconds
-	<li>suppress-night-mode: The nightmode is deactivated
-	<li>suppress-inactivity-mode: The inactivitymode is deactivated
-	<li>starttime: Starttime of inverter operation (default 5am) 
-	<li>endtime: Endtime of inverter operation (default 9pm)
-	<li>force-sleepmode: The nightmode is activated on inactivity, even the endtime is not reached
-	<li>enable-modulstate: Turns the reading "modulstate" (normal / inactive / sleeping) on
-	<li>alarm1-value, alarm2-value, alarm3-value: Set an alarm on the reading SpotP in watt.<br>
-	The readings Alarm1..Alarm3 are set accordingly: -1 for SpotP < alarmX-value and 1 for SpotP >= alarmX-value
+	<li>interval: Queryintreval in seconds </li>
+	<li>suppress-night-mode: The nightmode is deactivated </li>
+	<li>suppress-inactivity-mode: The inactivitymode is deactivated </li>
+	<li>starttime: Starttime of inverter operation (default 5am)  </li>
+	<li>endtime: Endtime of inverter operation (default 9pm) </li>
+	<li>force-sleepmode: The nightmode is activated on inactivity, even the endtime is not reached </li>
+	<li>enable-modulstate: Turns the reading "modulstate" (normal / inactive / sleeping) on </li>
+	<li>alarm1-value, alarm2-value, alarm3-value: Set an alarm on the reading SpotP in watt.<br> 
+	The readings Alarm1..Alarm3 are set accordingly: -1 for SpotP < alarmX-value and 1 for SpotP >= alarmX-value </li>
 </ul>
 
 <b>Readings</b>
  <ul>
-	<li>SpotP: spotpower - Current power in watt delivered by the inverter
-	<li>AvP01: average power 1 minute: average power in watt of the last minute
-	<li>AvP05: average power 5 minutes: average power in watt of the five minutes
-	<li>AvP15: average power 15 minutes: average power in watt of the fifteen minutes
-	<li>SpotPDC1: current d.c. voltage delivered by string 1
-	<li>SpotPDC2: current d.c. voltage delivered by string 2
-	<li>TotalTodayP: generated power in Wh of the current day
-	<li>AlltimeTotalP: all time generated power in Wh
-	<li>Alarm1..3: alrm trigger 1..3. Set by parameter alarmN-value
+	<li>SpotP: spotpower - Current power in watt delivered by the inverter </li>
+	<li>AvP01: average power 1 minute: average power in watt of the last minute </li>
+	<li>AvP05: average power 5 minutes: average power in watt of the five minutes </li>
+	<li>AvP15: average power 15 minutes: average power in watt of the fifteen minutes </li>
+	<li>SpotPDC1: current d.c. voltage delivered by string 1 </li>
+	<li>SpotPDC2: current d.c. voltage delivered by string 2 </li>
+	<li>TotalTodayP: generated power in Wh of the current day </li>
+	<li>AlltimeTotalP: all time generated power in Wh </li>
+	<li>Alarm1..3: alrm trigger 1..3. Set by parameter alarmN-value </li>
  </ul>
 
 
@@ -651,9 +651,9 @@ Getestet mit Sunny Tripower 6000TL-20, 10000-TL20 sowie 10000TL-10 mit  Speedwir
 <ul>
 <code>define &lt;name&gt; SMASTP &lt;pin&gt; &lt;hostname/ip&gt; [port]</code><br>
 <br>
-<li>pin: Benutzer-Passwort des SMA STP Wechselrichters. Default ist 0000. Kann über die Windows-Software "Sunny Explorer" geändert werden
-<li>hostname/ip: Hostname oder IP-Adresse des Wechselrichters (bzw. dessen Speedwire Moduls mit Ethernetanschluss)
-<li>port: Optional der Ports des Wechselrichters. Per default 9522.
+<li>pin: Benutzer-Passwort des SMA STP Wechselrichters. Default ist 0000. Kann über die Windows-Software "Sunny Explorer" geändert werden </li>
+<li>hostname/ip: Hostname oder IP-Adresse des Wechselrichters (bzw. dessen Speedwire Moduls mit Ethernetanschluss) </li>
+<li>port: Optional der Ports des Wechselrichters. Per default 9522. </li>
 </ul>
 
 <p>
@@ -670,28 +670,28 @@ Darüber hinaus gibt es den "Inactivitymode": hier wird der Wechselrichter abgef
 
 <b>Parameter</b>
 <ul>
-	<li>interval: Abfrageinterval in Sekunden
-	<li>suppress-night-mode: Der Nightmode wird deaktiviert
-	<li>suppress-inactivity-mode: Der Inactivitymode wird deaktiviert
-	<li>starttime: Startzeit des Betriebsmodus (Default 5:00 Uhr)
-	<li>endtime: Endezeit des Betriebsmodus (Default 21:00 Uhr)
-	<li>force-sleepmode: Der Nightmode wird bei entdeckter Inaktivität auch dann aktiviert, wenn endtime noch nicht erreicht ist
-	<li>enable-modulstate: Schaltet das reading "modulstate" (normal / inactive / sleeping) ein
-	<li>alarm1-value, alarm2-value, alarm3-value: Setzt einen Alarm in Watt auf das Reading SpotP. 
-	<br>Die Readings Alarm1..Alarm3 werden entsprechend gesetzt: -1 für SpotP < alarmX-value und 1 für Spot >= alarmX-value.
+	<li>interval: Abfrageinterval in Sekunden </li>
+	<li>suppress-night-mode: Der Nightmode wird deaktiviert </li>
+	<li>suppress-inactivity-mode: Der Inactivitymode wird deaktiviert </li>
+	<li>starttime: Startzeit des Betriebsmodus (Default 5:00 Uhr) </li>
+	<li>endtime: Endezeit des Betriebsmodus (Default 21:00 Uhr) </li>
+	<li>force-sleepmode: Der Nightmode wird bei entdeckter Inaktivität auch dann aktiviert, wenn endtime noch nicht erreicht ist </li>
+	<li>enable-modulstate: Schaltet das reading "modulstate" (normal / inactive / sleeping) ein </li>
+	<li>alarm1-value, alarm2-value, alarm3-value: Setzt einen Alarm in Watt auf das Reading SpotP.  
+	<br>Die Readings Alarm1..Alarm3 werden entsprechend gesetzt: -1 für SpotP < alarmX-value und 1 für Spot >= alarmX-value. </li>
 </ul>
 
 <b>Readings</b>
  <ul>
-	<li>SpotP: SpotPower - Leistung in W zum Zeitpunkt der Abfrage</li>
+	<li>SpotP: SpotPower - Leistung in W zum Zeitpunkt der Abfrage</li> 
 	<li>AvP01: Average Power 1 Minute - Durchschnittliche Leistung in W der letzten Minute</li>
 	<li>AvP05: Average Power 5 Minuten - Durchschnittliche Leistung in W der letzten 5 Minuten</li>
-	<li>AvP15: Average Power 15 Minuten - Durchschnittliche Leistung in W der letzten 15 Minuten</li>
-	<li>SpotPDC1: Spot Gleichspannung String 1
-	<li>SpotPDC2: Spot Gleichspannung String 2
-	<li>TotalTodayP: Erzeuge Leistung (in Wh) des heutigen Tages
-	<li>AlltimeTotalP: Erzeugte Leistung (in Wh) seit Inbetriebsnahme des Gerätes
-	<li>Alarm1..3: Alarm Trigger 1-3. Können über die Parameter "alarmN-value" gesetzt werden
+	<li>AvP15: Average Power 15 Minuten - Durchschnittliche Leistung in W der letzten 15 Minuten</li> 
+	<li>SpotPDC1: Spot Gleichspannung String 1 </li>
+	<li>SpotPDC2: Spot Gleichspannung String 2 </li>
+	<li>TotalTodayP: Erzeuge Leistung (in Wh) des heutigen Tages </li>
+	<li>AlltimeTotalP: Erzeugte Leistung (in Wh) seit Inbetriebsnahme des Gerätes </li>
+	<li>Alarm1..3: Alarm Trigger 1-3. Können über die Parameter "alarmN-value" gesetzt werden </li>
  </ul>
 
 

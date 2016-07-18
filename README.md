@@ -106,10 +106,10 @@ Then you can define your SMA-EM like this:
 * port: Port of the inverter. 9522 by default.
 
 The module automatically detects the inactvity of the inverter due to a lack of light (night). 
-This inactivity is therefore called "nightmode". During nightmode, the inverter is not queried over the nwtwork.
+This inactivity is therefore called "nightmode". During nightmode, the inverter is not queried over the network.
 By default nightmode is between 9pm and 5am. This can be changed by "starttime" (start of inverter 
-operation, ende of nightmode) and "endtime" (end of inverter operation, start of nightmode).
-Further there is the inactivitymode: in inactivitymode, the inverter is queried but readings are not updated.
+operation, end of nightmode) and "endtime" (end of inverter operation, start of nightmode).
+Further there is the inactivitymode: in inactivitymode, the inverter is queried but readings are not updated (since all of them are zero).
 
 Parameter:
 
