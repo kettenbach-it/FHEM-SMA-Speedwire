@@ -76,12 +76,17 @@ so you can distinguish between different SMA-EM inside FHEM.
 
 ## FHEM-SMASTP
 
-The module 77_SMASTP is deprecated.
-It will be removed from the official FHEM soon.
-Don't use it anymore!
-Please use 76_SMAInverter.pm instead.
-You'll find 76_SMAInverter.pm in the official FHEM SVN.
-Development resource of 76_SMAInverter.pm can be found here: https://github.com/Rincewind76/SMAInverter
+**The module 77_SMASTP is deprecated.**
+
+** It will be removed from the official FHEM soon. **
+
+** Don't use it anymore! **
+
+** Please use 76_SMAInverter.pm instead.**
+
+** You'll find 76_SMAInverter.pm in the official FHEM SVN.**
+
+** Development resource of 76_SMAInverter.pm can be found here: https://github.com/Rincewind76/SMAInverter**
 
 
 
