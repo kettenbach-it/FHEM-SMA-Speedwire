@@ -2,7 +2,7 @@
 Repository for FHEM-support of devices that use the "SMA Speedwire" protocol.
 
 * 77_SMAEM.pm: Support for SMA Energymeter, a bidirectional energy meter/counter
-* 77_SMASTP.pm: Support for SMA Sunny Tripower Inverter
+* ~~77_SMASTP.pm: Support for SMA Sunny Tripower Inverter~~ -> **Deprecated. Please use 76_SMAInverter.pm**
 
 
 ## FHEM-SMAEM
