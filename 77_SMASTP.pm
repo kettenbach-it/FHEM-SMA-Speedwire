@@ -93,6 +93,7 @@ sub SMASTP_Initialize($)
 						"interval " . 
 						$readingFnAttributes;
 	$hash->{AttrFn}   = "SMASTP_Attr";
+	$hash->{WARNING}  = "WARNING: THIS MODULE IS DEPRECATED. IT WILL BE REMOVED FROM FHEM SOON. PLEASE USE 76_SMAInverter INSTEAD";
 	
 	if ($attr{$name}{"starttime"})
 	{
@@ -126,6 +127,7 @@ sub SMASTP_Initialize($)
 	$alarm_value3 = ($attr{$name}{"alarm3-value"}) ? $attr{$name}{"alarm3-value"} : 0;
 	
 	Log3 $name, 0, "$name: Started with sleepmode from $endhour:$endminute - $starthour:$startminute";
+	return $hash->{WARNING};
 }
 
 ###################################
@@ -212,7 +214,8 @@ sub SMASTP_Define($$)
 
 	InternalTimer(gettimeofday()+5, "SMASTP_GetStatus", $hash, 0);	# refresh timer start
 
-	return undef;
+	#return undef;
+	return $hash->{WARNING};
 }
 
 #####################################
@@ -364,7 +367,7 @@ sub SMASTP_GetStatus($)
 	} else {
 		$hash->{INTERVAL} = 60;
 	}
-	
+	$hash->{WARNING}  = "WARNING: THIS MODULE IS DEPRECATED. IT WILL BE REMOVED FROM FHEM SOON. PLEASE USE 76_SMAInverter INSTEAD";
 	
 	my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime();
 	
