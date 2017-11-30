@@ -305,7 +305,7 @@ while (1) {
 	$sum = $l1_einspeisung_wirk + $l2_einspeisung_wirk + $l3_einspeisung_wirk;
 	print "\tEinspeisung Wirkleistung: $l1_einspeisung_wirk_s + $l2_einspeisung_wirk_s + $l3_einspeisung_wirk_s = $sum ? == $einspeisung_wirk_s\n";
 	$sum = $l1_einspeisung_wirk_count + $l2_einspeisung_wirk_count + $l3_einspeisung_wirk_count;
-	print "\tBezug Wirkleistung Zähler: $l1_einspeisung_wirk_count_s + $l2_einspeisung_wirk_count_s + $l3_einspeisung_wirk_count_s = $sum ?== $einspeisung_wirk_count_s\n";
+	print "\t\tEinspeisung Wirkleistung Zähler: $l1_einspeisung_wirk_count_s + $l2_einspeisung_wirk_count_s + $l3_einspeisung_wirk_count_s = $sum ?== $einspeisung_wirk_count_s\n";
 	print "\n";
 	$sum = $einspeisung_wirk + $einspeisung_blind;
 	print "\tEinspeisung Leistung $einspeisung_wirk_s + $einspeisung_blind_s = $sum ?== $einspeisung_schein_s\n"; 
