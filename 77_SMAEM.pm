@@ -1,5 +1,5 @@
 ################################################################################################
-# $Id: 77_SMAEM.pm 14488 2017-06-10 06:04:24Z vk $
+# $Id: 77_SMAEM.pm 16201 2018-02-17 15:01:35Z DS_Starter $
 #
 #  Copyright notice
 #
@@ -26,6 +26,8 @@
 #################################################################################################
 # Versions History done by DS_Starter
 #
+# 3.1.0    12.02.2018     extend error handling in define
+# 3.0.1    26.11.2017     use abort cause of BlockingCall
 # 3.0.0    29.09.2017     make SMAEM ready for multimeter usage
 # 2.9.1    29.05.2017     DbLog_splitFn added, some function names adapted
 # 2.9.0    25.05.2017     own SMAEM_setCacheValue, SMAEM_getCacheValue, new internal VERSION
@@ -51,7 +53,7 @@ use bignum;
 use IO::Socket::Multicast;
 use Blocking;
 
-my $SMAEMVersion = "3.0.0";
+my $SMAEMVersion = "3.1.0";
 
 ###############################################################
 #                  SMAEM Initialize
@@ -82,6 +84,7 @@ sub SMAEM_Define($$) {
   my ($hash, $def) = @_;
   my $name= $hash->{NAME};
   my ($success, $gridin_sum, $gridout_sum);
+  my $socket;
   
   $hash->{INTERVAL}              = 60 ;
   $hash->{VERSION}               = $SMAEMVersion;
@@ -89,12 +92,19 @@ sub SMAEM_Define($$) {
   $hash->{HELPER}{STARTTIME}     = time();
     
   Log3 $hash, 3, "SMAEM $name - Opening multicast socket...";
-  my $socket = IO::Socket::Multicast->new(
+  eval {
+  $socket = IO::Socket::Multicast->new(
            Proto     => 'udp',
            LocalPort => '9522',
            ReuseAddr => '1',
            ReusePort => defined(&ReusePort) ? 1 : 0,
-  ) or return "Can't bind : $@";
+  ); };
+  if($@) {
+      Log3 $hash, 1, "SMAEM $name - Can't bind: $@";
+      return;      
+  }
+  
+  Log3 $hash, 3, "SMAEM $name - Multicast socket opened";
   
   $socket->mcast_add('239.12.255.254');
 
@@ -604,14 +614,15 @@ return;
 #           Abbruchroutine Timeout Inverter Abfrage
 ###############################################################
 sub SMAEM_ParseAborted($) {
-  my ($hash) = @_;
+  my ($hash,$cause) = @_;
   my $name = $hash->{NAME};
   my $discycles  = $hash->{HELPER}{FAULTEDCYCLES};
+  $cause = $cause?$cause:"Timeout: process terminated";
    
   $discycles++;
   $hash->{HELPER}{FAULTEDCYCLES} = $discycles;
-  Log3 ($name, 1, "SMAEM $name -> BlockingCall $hash->{HELPER}{RUNNING_PID}{fn} timed out");
-  readingsSingleUpdate($hash, "state", "timeout", 1);
+  Log3 ($name, 1, "SMAEM $name -> BlockingCall $hash->{HELPER}{RUNNING_PID}{fn} $cause");
+  readingsSingleUpdate($hash, "state", $cause, 1);
   delete($hash->{HELPER}{RUNNING_PID});
 }
 
@@ -875,7 +886,7 @@ return;
                                       Hence faulty DB entries with a disproportional high difference values will be eliminated, don't 
 									  tamper the result and the measure cycles will be discarded.  </li>
   <li><b>powerCost</b>              : the individual amount of power cost per kWh </li>
-  <li><b>timeout</b>                : adjustment of timeout for inverter request (default 60s) </li> 
+  <li><b>timeout</b>                : adjustment timeout of backgound processing (default 60s). The value of timeout has to be higher than the value of "interval". </li> 
 </ul>
 <br>
 
@@ -944,7 +955,7 @@ However there are readings what maybe need some explanation. <br>
 								      Damit werden eventuell fehlerhafte Differenzen mit einem unverhältnismäßig hohen Differenzwert von der Berechnung 
 									  ausgeschlossen und der Messzyklus verworfen.  </li>
   <li><b>powerCost</b>              : die individuelle Höhe der Stromkosten pro Kilowattstunde </li>
-  <li><b>timeout</b>                : Einstellung des timeout für die Wechselrichterabfrage (default 60s) </li> 
+  <li><b>timeout</b>                : Einstellung timeout für Hintergrundverarbeitung (default 60s). Der timeout-Wert muss größer als das Wert von "interval" sein. </li> 
 </ul>
 <br>
 
