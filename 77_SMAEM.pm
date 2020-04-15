@@ -29,7 +29,6 @@ package main;
 
 use strict;
 use warnings;
-use bignum;
 use IO::Socket::Multicast;
 use Blocking;
 eval "use FHEM::Meta;1" or my $modMetaAbsent = 1;
@@ -1334,7 +1333,6 @@ return;
       "requires": {
         "FHEM": 5.00918799,
         "perl": 5.014,
-        "bignum": 0,
         "IO::Socket::Multicast": 0,
         "Blocking": 0      
       },

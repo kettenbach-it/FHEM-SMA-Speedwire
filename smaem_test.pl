@@ -29,7 +29,6 @@
 
 use strict;
 use warnings;
-use bignum;
 
 use IO::Socket::Multicast;
 
