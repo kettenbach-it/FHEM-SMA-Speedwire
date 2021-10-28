@@ -36,6 +36,7 @@ eval "use FHEM::Meta;1" or my $modMetaAbsent = 1;
 
 # Versions History by DS_Starter 
 our %SMAEM_vNotesIntern = (
+  "4.3.1" => "28.10.2021  Support for  Softwareversion 2.07.5.R",
   "4.3.0" => "06.12.2020  attribute serialNumber may contain multiple serial numbers, extend logging with serial number ",
   "4.2.0" => "14.04.2020  delete 'use bignum' ",
   "4.1.0" => "17.03.2020  add define option <interface> ",
